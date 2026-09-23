@@ -61,7 +61,7 @@ img{max-width:100%;}
 .wrap{max-width:720px;margin:0 auto;}
 
 .deadline-bar{
-  position:sticky;top:env(safe-area-inset-top,0px); z-index:20;
+  position:sticky;top:0; z-index:20;
   margin-inline:-16px; padding:10px 16px; padding-top:calc(10px + env(safe-area-inset-top,0px));
   background:var(--warn); color:#fff; text-align:center; font-weight:700; font-size:14px; letter-spacing:.02em;
 }
@@ -98,7 +98,7 @@ h1{font-size:clamp(26px,7vw,34px);font-weight:800;margin:0 0 10px;color:var(--in
   background:var(--surface);color:var(--ink-soft);font-weight:700;font-size:15px;
   font-family:inherit;cursor:pointer;
 }
-.os-btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+.os-btn[aria-selected="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
 
 .steps{margin-block:22px;display:flex;flex-direction:column;gap:16px;}
 .step{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px 18px;position:relative;scroll-margin-top:118px;}
@@ -180,10 +180,11 @@ h1{font-size:clamp(26px,7vw,34px);font-weight:800;margin:0 0 10px;color:var(--in
 .step[data-state="pending"] .step-body,
 .step[data-state="pending"] .check-row{display:none;}
 .step[data-state="pending"] .step-status{color:var(--ink-soft);}
+.step-status:empty{padding-left:0;}
 .step[data-state="done"] .step-body,
 .step[data-state="done"] .check-row{display:none;}
-.step[data-state="done"].expanded .step-body,
-.step[data-state="done"].expanded .check-row{display:block;}
+.step[data-state="done"].expanded .step-body{display:block;}
+.step[data-state="done"].expanded .check-row{display:flex;}
 .step[data-state="done"] .step-status{color:var(--accent);}
 .step[data-state="done"] .step-top{cursor:pointer;}
 .step[data-state="done"] .num{background:var(--accent);}
@@ -237,8 +238,8 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
   </div>
 
   <div class="os-switch" role="tablist" aria-label="お使いのパソコンを選ぶ">
-    <button class="os-btn" id="btn-win" aria-pressed="true" role="tab">🪟 Windowsを使っている</button>
-    <button class="os-btn" id="btn-mac" aria-pressed="false" role="tab">🍎 Macを使っている</button>
+    <button class="os-btn" id="btn-win" aria-selected="true" role="tab">🪟 Windowsを使っている</button>
+    <button class="os-btn" id="btn-mac" aria-selected="false" role="tab">🍎 Macを使っている</button>
   </div>
 
   <div class="progress-wrap">
@@ -312,7 +313,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
             </svg>
             <div class="mockup-cap">ファイルを<b>2回クリック</b>→「詳細情報」→「<b>実行</b>」を押す</div>
           </div>
-          <p>ダウンロードしたファイル（画面の下や「ダウンロード」フォルダにあります）を<b>ダブルクリック</b>します。青い画面で「<b>Windows によって PC が保護されました</b>」と出ることがありますが、これは「知らない場所からのアプリだから念のため確認しています」という意味のいつもの表示で、公式サイトからダウンロードしていれば問題ありません。「<b>詳細情報</b>」→「<b>実行</b>」の順に押すとインストールが始まります。</p>
+          <p>ダウンロードしたファイル（画面の下や「ダウンロード」フォルダにあります）を<b>ダブルクリック</b>します。青い画面で「<b>Windows によって PC が保護されました</b>」と出ることがありますが、これは「知らない場所からのアプリだから念のため確認しています」という意味のいつもの表示で、公式サイトからダウンロードしていれば問題ありません。まず「<b>詳細情報</b>」を押すと、その下に新しく「<b>実行</b>」ボタンが現れるので、それを押すとインストールが始まります。</p>
           <div class="tip"><b>安心してください：</b>ここで入れたアプリは、他のソフトと同じように後から「アプリと機能」の画面でいつでも削除（アンインストール）できます。パソコンが壊れることはありません。</div>
         </div>
 
@@ -361,7 +362,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
         </div>
         <p>Claudeが起動したら、案内にしたがって<b>メールアドレス</b>を入力し「続ける」を押します（<b>サインイン</b>＝会員証を見せて入る、という意味です）。まだアカウントを持っていない場合は、その場で新しく作れます（メールアドレスだけでOKです）。</p>
         <p>そのあと、入力したメール宛に6桁くらいの<b>確認コード（数字）</b>が届きます。画面に出てくる四角い入力欄に、そのコードを入力すれば完了です。メールのリンクを押すだけで済む場合もあります。</p>
-        <div class="tip"><b>ヒント：</b>ふだん使っているメールアドレス（Gmailなど）で大丈夫です。ここで入力したメールアドレスが、他の会社に売られたり、変な広告が届いたりすることはありません。</div>
+        <div class="tip"><b>ヒント：</b>ふだん使っているメールアドレス（Gmailなど）で大丈夫です。サインインのためだけに使われ、広告目的で他社に販売されることはありません。</div>
       </div>
       <label class="check-row"><input type="checkbox" data-check="3"> できた</label>
     </div>
@@ -392,7 +393,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
           </svg>
           <div class="mockup-cap">右側の<b>有料プラン（Pro）</b>を選んで、支払い方法を登録する</div>
         </div>
-        <p>「Code」の画面を使うには、<b>有料プラン（画面には「Pro」と表示されます）</b>への申し込みが必要です（無料プランでは使えません）。金額は<b>1か月あたり20ドル、日本円で3,000円くらい</b>です（1年分まとめて払うと少し安くなります）。画面の案内にそって、クレジットカードなどの支払い方法を登録してください。</p>
+        <p>「Code」の画面を使うには、<b>有料プラン（画面には「Pro」と表示されます）</b>への申し込みが必要です（無料プランでは使えません）。金額は<b>1か月あたり20ドル、日本円で3,000円くらい（為替レートや税により変動、目安の金額です）</b>です（1年分まとめて払うと少し安くなります）。画面の案内にそって、クレジットカードなどの支払い方法を登録してください。</p>
         <div class="warn-box">💳 ここだけ費用が発生する場所です。申し込む前に、金額と「1か月ごとに自動で支払いが続く」ことを画面でよくご確認ください。会社経費で処理したい場合や、やめ方（解約方法）が分からない場合はLINEグループでご相談ください。あとから解約すればそれ以上は請求されません。</div>
       </div>
       <label class="check-row"><input type="checkbox" data-check="4"> できた</label>
@@ -424,7 +425,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
           </svg>
           <div class="mockup-cap">上の<b>「Code」</b>タブ→出てきたら<b>「新しいフォルダを作る」</b></div>
         </div>
-        <p>Claudeの画面の上のほうに、<span class="kbd">Chat</span> <span class="kbd">Cowork</span> <span class="kbd">Code</span> というタブが並んでいます。今回使うのは「<b>Code</b>」（研修で練習する場所）です。真ん中あたりの「<b>Code</b>」を押してください。</p>
+        <p>Claudeの画面の上のほうに、<span class="kbd">Chat</span> <span class="kbd">Cowork</span> <span class="kbd">Code</span> というタブが並んでいます。今回使うのは「<b>Code</b>」（研修で練習する場所）です。右のほうにある「<b>Code</b>」を押してください。</p>
         <p>「フォルダを選んでください」という案内が出たら、<b>「新しいフォルダを作る」</b>を選び、デスクトップに好きな名前（例：れんしゅう）で作って選んでください。パソコンにもともとある「名前を付けて保存」の画面と似たものが出ることもありますが、やることは同じで、場所と名前を決めて「作成」や「選択」を押すだけです。むずかしく考えなくて大丈夫です。</p>
       </div>
       <label class="check-row"><input type="checkbox" data-check="5"> できた</label>
@@ -489,7 +490,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
             <div class="mockup-cap"><span class="kbd">Win</span>+<span class="kbd">Shift</span>+<span class="kbd">S</span> で範囲を囲む→右下の<b>通知</b>を押す</div>
           </div>
           <p>キーボードの <span class="kbd">Win</span> ＋ <span class="kbd">Shift</span> ＋ <span class="kbd">S</span> を同時に押します。画面が少し暗くなるので、返事が見えている範囲をマウスでドラッグして囲みます。</p>
-          <div class="warn-box">⚠️ <b>ここが大事：</b>囲んだだけではファイルとして保存されません。囲み終わると<b>画面の右下に小さな通知</b>が出るので、それを<b>クリック（タップ）</b>してください。編集画面が開くので、右上の「<b>名前を付けて保存</b>」（フロッピーディスクのマーク）を押してデスクトップなどに保存すれば、STEP8でLINEに送れるようになります。</div>
+          <div class="warn-box">⚠️ <b>ここが大事：</b>囲んだだけではファイルとして保存されないことがあります（パソコンの設定によっては自動で「ピクチャ」フォルダ等に保存される場合もあります）。確実なのは、囲み終わると出る<b>画面の右下の小さな通知</b>を<b>クリック（タップ）</b>する方法です。編集画面が開くので、右上の「<b>名前を付けて保存</b>」（フロッピーディスクのマーク）を押してデスクトップなどに保存すれば、STEP8でLINEに送れるようになります。</div>
         </div>
 
         <div class="os-only mac">
@@ -568,7 +569,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
     <div class="line-badge">LINEグループ「claude code研修」へ</div>
   </div>
 
-  <footer>Claude Code研修（2026年11月26日）事前準備ガイド ／ 最終更新 2026年9月23日</footer>
+  <footer>Claude Code研修（2026年11月26日）事前準備ガイド ／ 最終更新 2026年9月23日<br>このページはフォント表示のためGoogle Fontsを利用しています。</footer>
 </div>
 
 <script>
@@ -579,8 +580,8 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
   function setOS(os){
     app.classList.remove('os-win','os-mac');
     app.classList.add('os-'+os);
-    btnWin.setAttribute('aria-pressed', os==='win');
-    btnMac.setAttribute('aria-pressed', os==='mac');
+    btnWin.setAttribute('aria-selected', os==='win');
+    btnMac.setAttribute('aria-selected', os==='mac');
     try{localStorage.setItem('cc-guide-os', os);}catch(e){}
   }
   btnWin.addEventListener('click',function(){setOS('win');});
@@ -601,15 +602,16 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
      保存や読み込みに失敗してもメモリの値がそのまま使われるので進行は止まらない。 */
   var mem={};
   var storageBroken=false;
+  var STORAGE_KEY_PREFIX='cc-guide-v1-check-';
   function isChecked(n){
     if(Object.prototype.hasOwnProperty.call(mem,n)) return mem[n];
-    try{ mem[n]=(localStorage.getItem('cc-guide-check-'+n)==='1'); }
+    try{ mem[n]=(localStorage.getItem(STORAGE_KEY_PREFIX+n)==='1'); }
     catch(e){ storageBroken=true; mem[n]=false; }
     return mem[n];
   }
   function setChecked(n,val){
     mem[n]=!!val;
-    try{ localStorage.setItem('cc-guide-check-'+n, val?'1':'0'); }
+    try{ localStorage.setItem(STORAGE_KEY_PREFIX+n, val?'1':'0'); }
     catch(e){ storageBroken=true; }
   }
 
@@ -621,6 +623,15 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
   }
   syncStickyOffset();
   window.addEventListener('resize', syncStickyOffset);
+
+  /* 別タブでチェックした進捗をこのタブにも反映する */
+  window.addEventListener('storage', function(e){
+    if(e.key && e.key.indexOf(STORAGE_KEY_PREFIX)===0){
+      var n=parseInt(e.key.slice(STORAGE_KEY_PREFIX.length),10);
+      if(!isNaN(n)){ delete mem[n]; }
+      render();
+    }
+  });
 
   function render(opts){
     opts=opts||{};
@@ -637,18 +648,26 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
       var n=parseInt(el.getAttribute('data-step'),10);
       var cb=el.querySelector('[data-check="'+n+'"]');
       var statusEl=el.querySelector('.step-status');
+      var top=el.querySelector('.step-top');
       if(cb) cb.checked=isChecked(n);
       if(isChecked(n)){
         el.setAttribute('data-state','done');
         if(statusEl) statusEl.textContent = el.classList.contains('expanded') ? '△ 閉じる' : '✓ 完了（タップで開く）';
+        if(top){
+          top.setAttribute('tabindex','0');
+          top.setAttribute('role','button');
+          top.setAttribute('aria-expanded', el.classList.contains('expanded'));
+        }
       } else if(n===firstPending){
         el.setAttribute('data-state','active');
         el.classList.remove('expanded');
         if(statusEl) statusEl.textContent='';
+        if(top){ top.removeAttribute('tabindex'); top.removeAttribute('role'); top.removeAttribute('aria-expanded'); }
       } else {
         el.setAttribute('data-state','pending');
         el.classList.remove('expanded');
         if(statusEl) statusEl.textContent='🔒 まだです';
+        if(top){ top.removeAttribute('tabindex'); top.removeAttribute('role'); top.removeAttribute('aria-expanded'); }
       }
     });
 
@@ -671,14 +690,29 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
     if(cb){
       cb.addEventListener('change',function(){
         setChecked(n, cb.checked);
+        if(!cb.checked){
+          /* 途中のステップを外したら、それより後ろの完了も一緒に外す（後ろだけ完了のまま残る食い違いを防ぐ） */
+          steps.forEach(function(laterEl){
+            var m=parseInt(laterEl.getAttribute('data-step'),10);
+            if(m>n && isChecked(m)) setChecked(m,false);
+          });
+        }
         render(cb.checked ? {autoScroll:true} : {});
       });
     }
     if(top){
-      top.addEventListener('click',function(){
+      var toggleOpen=function(){
         if(el.getAttribute('data-state')==='done'){
           el.classList.toggle('expanded');
+          top.setAttribute('aria-expanded', el.classList.contains('expanded'));
           render();
+        }
+      };
+      top.addEventListener('click',toggleOpen);
+      top.addEventListener('keydown',function(ev){
+        if(ev.key==='Enter'||ev.key===' '||ev.key==='Spacebar'){
+          ev.preventDefault();
+          toggleOpen();
         }
       });
     }
