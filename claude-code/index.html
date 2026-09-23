@@ -188,7 +188,8 @@ h1{font-size:clamp(26px,7vw,34px);font-weight:800;margin:0 0 10px;color:var(--in
 .step[data-state="done"] .step-top{cursor:pointer;}
 .step[data-state="done"] .num{background:var(--accent);}
 
-.final{margin-block:28px;background:var(--accent-soft);border:1px solid var(--accent-soft-border);border-radius:20px;padding:22px;}
+.final{margin-block:28px;background:var(--accent-soft);border:1px solid var(--accent-soft-border);border-radius:20px;padding:22px;scroll-margin-top:118px;}
+@media (max-width:480px){ .final{scroll-margin-top:172px;} }
 .final h2{font-size:20px;margin:0 0 10px;}
 .final ol{margin:0;padding-left:20px;font-size:15.5px;}
 .final li{margin-bottom:6px;}
@@ -232,7 +233,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
       <span class="chip">⑤撮る</span><span class="arrow">→</span>
       <span class="chip">⑥送る</span>
     </div>
-    <p style="margin-top:12px;font-size:14.5px;color:var(--ink-soft);">パソコンに「Claude」を入れて、そこの「Code」という画面で<b style="color:var(--ink);">「おはようございます」</b>と打ち、返事が出た画面を撮影してLINEグループに送る。それだけです。</p>
+    <p style="margin-top:12px;font-size:14.5px;color:var(--ink-soft);">パソコンに「Claude」を入れて、そこの「Code」という画面で<b style="color:var(--ink);">「おはようございます」</b>と打ち、返事が出た画面を撮影してLINEグループに送る。それだけです（途中で1回だけ、<b style="color:var(--ink);">月3,000円ほどの有料プラン</b>への申し込みが必要になります）。</p>
   </div>
 
   <div class="os-switch" role="tablist" aria-label="お使いのパソコンを選ぶ">
@@ -594,13 +595,32 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
   var TOTAL=steps.length;
   var progressFill=document.getElementById('progress-fill');
   var progressLabel=document.getElementById('progress-label');
+  var finalEl=document.querySelector('.final');
 
+  /* 状態の正本はメモリ上に持つ。localStorageは「できれば永続化する」補助扱いにし、
+     保存や読み込みに失敗してもメモリの値がそのまま使われるので進行は止まらない。 */
+  var mem={};
+  var storageBroken=false;
   function isChecked(n){
-    try{ return localStorage.getItem('cc-guide-check-'+n)==='1'; }catch(e){ return false; }
+    if(Object.prototype.hasOwnProperty.call(mem,n)) return mem[n];
+    try{ mem[n]=(localStorage.getItem('cc-guide-check-'+n)==='1'); }
+    catch(e){ storageBroken=true; mem[n]=false; }
+    return mem[n];
   }
   function setChecked(n,val){
-    try{ localStorage.setItem('cc-guide-check-'+n, val?'1':'0'); }catch(e){}
+    mem[n]=!!val;
+    try{ localStorage.setItem('cc-guide-check-'+n, val?'1':'0'); }
+    catch(e){ storageBroken=true; }
   }
+
+  /* 締切バーが折り返して高さが変わっても、OS切替タブが隠れないように毎回測って合わせる */
+  function syncStickyOffset(){
+    var bar=document.querySelector('.deadline-bar');
+    var sw=document.querySelector('.os-switch');
+    if(bar && sw){ sw.style.top=bar.offsetHeight+'px'; }
+  }
+  syncStickyOffset();
+  window.addEventListener('resize', syncStickyOffset);
 
   function render(opts){
     opts=opts||{};
@@ -610,7 +630,8 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
       if(isChecked(n)) doneCount++;
       else if(firstPending===null) firstPending=n;
     });
-    if(firstPending===null) firstPending=TOTAL+1;
+    var allDone = (firstPending===null);
+    if(allDone) firstPending=TOTAL+1;
 
     steps.forEach(function(el){
       var n=parseInt(el.getAttribute('data-step'),10);
@@ -635,8 +656,8 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
     if(progressFill) progressFill.style.width=pct+'%';
     if(progressLabel) progressLabel.textContent=doneCount+' / '+TOTAL+' 完了';
 
-    if(opts.scrollTo){
-      var target=steps[Math.min(opts.scrollTo-1, steps.length-1)];
+    if(opts.autoScroll){
+      var target = allDone ? finalEl : steps[firstPending-1];
       if(target){
         setTimeout(function(){ target.scrollIntoView({behavior:'smooth', block:'start'}); }, 150);
       }
@@ -650,7 +671,7 @@ footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24
     if(cb){
       cb.addEventListener('change',function(){
         setChecked(n, cb.checked);
-        render(cb.checked ? {scrollTo:n+1} : {});
+        render(cb.checked ? {autoScroll:true} : {});
       });
     }
     if(top){
