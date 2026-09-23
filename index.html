@@ -1,1 +1,454 @@
-PLACEHOLDER
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>はじめてのClaude Code</title>
+<meta name="description" content="研修までにパソコンで「おはようございます」を送るところまでの準備ガイドです。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%230F6E5C%22/><text x=%2212%22 y=%2217%22 font-size=%2214%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22>C</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F6FA;
+  --surface:#FFFFFF;
+  --surface-2:#EAF0F6;
+  --ink:#1B2430;
+  --ink-soft:#4E5A6B;
+  --border:#D9E1EC;
+  --accent:#0F6E5C;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#E1F2EC;
+  --accent-soft-border:#BFE3D5;
+  --warn:#B23A2E;
+  --warn-soft:#FBEAE7;
+  --warn-soft-border:#F0C4BC;
+  --num-ring:#D9E1EC;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151D;
+    --surface:#1A2129;
+    --surface-2:#212A34;
+    --ink:#EEF2F7;
+    --ink-soft:#AAB5C4;
+    --border:#2B3542;
+    --accent:#4FC3A7;
+    --accent-ink:#08201A;
+    --accent-soft:#16302A;
+    --accent-soft-border:#245144;
+    --warn:#FF8A78;
+    --warn-soft:#3A1F1B;
+    --warn-soft-border:#5C332C;
+    --num-ring:#3A4453;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151D;
+  --surface:#1A2129;
+  --surface-2:#212A34;
+  --ink:#EEF2F7;
+  --ink-soft:#AAB5C4;
+  --border:#2B3542;
+  --accent:#4FC3A7;
+  --accent-ink:#08201A;
+  --accent-soft:#16302A;
+  --accent-soft-border:#245144;
+  --warn:#FF8A78;
+  --warn-soft:#3A1F1B;
+  --warn-soft-border:#5C332C;
+  --num-ring:#3A4453;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif;
+  font-size:17px;
+  line-height:1.75;
+  padding-inline:16px;
+}
+h1,h2,h3,.disp{font-family:"M PLUS Rounded 1c","Zen Kaku Gothic New",sans-serif;text-wrap:balance;}
+a{color:var(--accent);}
+img{max-width:100%;}
+.wrap{max-width:720px;margin:0 auto;}
+
+/* 締切バー */
+.deadline-bar{
+  position:sticky;top:env(safe-area-inset-top,0px);
+  z-index:20;
+  margin-inline:-16px;
+  padding:10px 16px;
+  padding-top:calc(10px + env(safe-area-inset-top,0px));
+  background:var(--warn);
+  color:#fff;
+  text-align:center;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.02em;
+}
+.deadline-bar b{font-size:15px;}
+
+/* ヘッダー */
+.hero{padding-block:28px 20px;}
+.eyebrow{
+  display:inline-block;
+  font-size:13px;font-weight:700;color:var(--accent);
+  background:var(--accent-soft);
+  border:1px solid var(--accent-soft-border);
+  padding:4px 12px;border-radius:999px;
+  margin-bottom:14px;
+}
+h1{font-size:clamp(26px,7vw,34px);font-weight:800;margin:0 0 10px;color:var(--ink);}
+.lead{color:var(--ink-soft);font-size:16px;margin:0 0 18px;}
+.meta-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:16px 18px;display:grid;gap:8px;font-size:15px;
+}
+.meta-card div{display:flex;gap:10px;align-items:baseline;}
+.meta-card .k{color:var(--ink-soft);flex:0 0 88px;font-weight:700;font-size:13px;}
+
+/* ゴール帯 */
+.goal{
+  margin-block:24px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+}
+.goal h2{font-size:19px;margin:0 0 14px;}
+.goal-flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--ink-soft);}
+.goal-flow span.chip{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:10px;padding:6px 10px;color:var(--ink);font-weight:500;
+  white-space:nowrap;
+}
+.goal-flow .arrow{color:var(--ink-soft);}
+
+/* OSタブ */
+.os-switch{
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 40px);
+  z-index:19;
+  display:flex;gap:8px;background:var(--bg);
+  padding-block:10px;margin-inline:-16px;padding-inline:16px;
+  border-bottom:1px solid var(--border);
+}
+.os-btn{
+  flex:1;padding:12px 10px;border-radius:12px;border:2px solid var(--border);
+  background:var(--surface);color:var(--ink-soft);font-weight:700;font-size:15px;
+  font-family:inherit;cursor:pointer;
+}
+.os-btn[aria-pressed="true"]{
+  border-color:var(--accent);color:var(--accent);background:var(--accent-soft);
+}
+
+/* ステップ */
+.steps{margin-block:22px;display:flex;flex-direction:column;gap:16px;}
+.step{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:20px 18px;position:relative;
+}
+.step-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px;}
+.num{
+  flex:0 0 auto;width:40px;height:40px;border-radius:50%;
+  background:var(--accent);color:var(--accent-ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"M PLUS Rounded 1c",sans-serif;font-weight:800;font-size:18px;
+  box-shadow:0 0 0 4px var(--num-ring);
+}
+.step h3{font-size:18px;margin:4px 0 0;color:var(--ink);}
+.step-body{color:var(--ink);font-size:15.5px;}
+.step-body p{margin:0 0 10px;}
+.step-icon{
+  width:52px;height:52px;flex:0 0 52px;border-radius:14px;background:var(--accent-soft);
+  border:1px solid var(--accent-soft-border);
+  display:flex;align-items:center;justify-content:center;
+}
+.step-icon svg{width:28px;height:28px;stroke:var(--accent);}
+.step-top{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
+
+.btn-link{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:var(--accent-ink);
+  font-weight:700;text-decoration:none;
+  padding:12px 18px;border-radius:12px;font-size:15px;margin-top:6px;
+}
+.btn-link:visited{color:var(--accent-ink);}
+
+.tip{
+  background:var(--surface-2);border-left:4px solid var(--accent);
+  border-radius:8px;padding:10px 12px;font-size:14px;color:var(--ink-soft);margin-top:10px;
+}
+.tip b{color:var(--ink);}
+.warn-box{
+  background:var(--warn-soft);border:1px solid var(--warn-soft-border);
+  border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);margin-top:10px;
+}
+
+.kbd{
+  display:inline-block;background:var(--surface-2);border:1px solid var(--border);
+  border-bottom-width:2px;border-radius:6px;padding:2px 8px;font-weight:700;font-size:14px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;
+}
+
+.type-box{
+  background:var(--ink);color:var(--bg);border-radius:12px;padding:14px 16px;
+  font-size:16px;font-weight:700;margin-block:10px;
+  display:flex;align-items:center;gap:10px;
+}
+
+.os-only{display:none;}
+.os-win .os-only.win{display:block;}
+.os-mac .os-only.mac{display:block;}
+.os-win .os-only.win-inline{display:inline;}
+.os-mac .os-only.mac-inline{display:inline;}
+
+/* チェック */
+.check-row{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:15px;}
+.check-row input{width:22px;height:22px;accent-color:var(--accent);}
+.step.done{border-color:var(--accent);}
+.step.done .num{background:var(--accent);}
+
+/* 最終ゴール */
+.final{
+  margin-block:28px;background:var(--accent-soft);border:1px solid var(--accent-soft-border);
+  border-radius:20px;padding:22px;
+}
+.final h2{font-size:20px;margin:0 0 10px;}
+.final ol{margin:0;padding-left:20px;font-size:15.5px;}
+.final li{margin-bottom:6px;}
+
+/* 困ったとき */
+.help{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:20px;margin-block:20px;text-align:center;
+}
+.help h2{font-size:18px;margin:0 0 8px;}
+.help .line-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#06C755;color:#fff;font-weight:800;
+  padding:10px 20px;border-radius:999px;margin-top:8px;font-size:15px;
+}
+
+footer{color:var(--ink-soft);font-size:12.5px;text-align:center;padding-block:24px 40px;}
+
+@media (min-width:560px){
+  .os-switch{max-width:720px;margin-inline:auto;left:0;right:0;padding-inline:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="deadline-bar">📅 締切：<b>11月19日(木)</b> までに、画面のスクリーンショットをLINEグループへ送ってください</div>
+
+<div class="wrap os-win" id="app">
+
+  <div class="hero">
+    <span class="eyebrow">Claude Code研修（11/26 木 9:00〜12:00）事前準備</span>
+    <h1>はじめてのClaude Code<br>かんたん準備ガイド</h1>
+    <p class="lead">この1枚を上から順番に進めるだけで、研修の準備が終わります。むずかしい言葉はできるだけ使いません。わからないところがあれば、いつでもLINEグループで聞いてください。</p>
+    <div class="meta-card">
+      <div><span class="k">研修日時</span><span>2026年11月26日（木）9:00〜12:00</span></div>
+      <div><span class="k">参加方法</span><span>Google Meet（当日リンクは主催者から共有されます）</span></div>
+      <div><span class="k">準備の締切</span><span>11月19日（木）まで</span></div>
+      <div><span class="k">連絡先</span><span>LINEグループ「claude code研修」</span></div>
+    </div>
+  </div>
+
+  <div class="goal">
+    <h2>🎯 このページのゴール</h2>
+    <div class="goal-flow">
+      <span class="chip">①入れる</span><span class="arrow">→</span>
+      <span class="chip">②入る</span><span class="arrow">→</span>
+      <span class="chip">③開く</span><span class="arrow">→</span>
+      <span class="chip">④打つ</span><span class="arrow">→</span>
+      <span class="chip">⑤撮る</span><span class="arrow">→</span>
+      <span class="chip">⑥送る</span>
+    </div>
+    <p style="margin-top:12px;font-size:14.5px;color:var(--ink-soft);">パソコンに「Claude」を入れて、そこの「Code」という画面で<b style="color:var(--ink);">「おはようございます」</b>と打ち、返事が出た画面を撮影してLINEグループに送る。それだけです。</p>
+  </div>
+
+  <div class="os-switch" role="tablist" aria-label="お使いのパソコンを選ぶ">
+    <button class="os-btn" id="btn-win" aria-pressed="true" role="tab">🪟 Windowsを使っている</button>
+    <button class="os-btn" id="btn-mac" aria-pressed="false" role="tab">🍎 Macを使っている</button>
+  </div>
+
+  <div class="steps">
+
+    <!-- STEP1 -->
+    <div class="step" data-step="1">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M6 11l6 6 6-6"/><path d="M4 21h16"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 1</span><h3>「Claude」をダウンロードする</h3></div>
+      </div>
+      <div class="step-body">
+        <p>下のボタンを押すと、公式サイトのダウンロードページが開きます。<span class="os-only win-inline">Windows用</span><span class="os-only mac-inline">Mac用</span>のボタンを押してください。</p>
+        <a class="btn-link" href="https://claude.ai/download" target="_blank" rel="noopener">⬇️ ダウンロードページを開く</a>
+        <div class="tip"><b>ヒント：</b>画面の下や、ブラウザの右上に「ダウンロード完了」の表示が出たら次に進めます。<span class="os-only win">Windowsは <span class="kbd">.exe</span> というファイルが保存されます。</span><span class="os-only mac">Macは <span class="kbd">.dmg</span> というファイルが保存されます。</span></div>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="1"> できた</label>
+    </div>
+
+    <!-- STEP2 -->
+    <div class="step" data-step="2">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 2</span><h3>ダウンロードしたファイルを開いてインストール</h3></div>
+      </div>
+      <div class="step-body">
+        <div class="os-only win">
+          <p>ダウンロードしたファイル（画面の下や「ダウンロード」フォルダにあります）を<b>ダブルクリック</b>します。「このアプリがデバイスに変更を加えることを許可しますか？」と出たら「<b>はい</b>」を押します。インストールが終わると、自動でClaudeが立ち上がります。</p>
+        </div>
+        <div class="os-only mac">
+          <p>ダウンロードしたファイルを<b>ダブルクリック</b>すると、四角い窓が開きます。窓の中の「Claude」のアイコンを、<b>右側の「Applications」フォルダの絵の上までドラッグ</b>して離します。その後、Launchpadや「アプリケーション」フォルダから「Claude」を開きます。</p>
+        </div>
+        <div class="tip"><b>もし「開発元が未確認のため開けません」と出たら：</b>一度キャンセルし、LINEグループで「インストールできない」と一言送ってください。折り返します。</div>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="2"> できた</label>
+    </div>
+
+    <!-- STEP3 -->
+    <div class="step" data-step="3">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 3</span><h3>サインインする</h3></div>
+      </div>
+      <div class="step-body">
+        <p>Claudeが起動したら、案内にしたがって<b>メールアドレス</b>を入力します。まだアカウントを持っていない場合は、その場で新しく作れます（メールアドレスだけでOKです）。届いたメールのコードを入力するか、メール内のリンクを押せば完了です。</p>
+        <div class="tip"><b>ヒント：</b>ふだん使っているメールアドレス（Gmailなど）で大丈夫です。</div>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="3"> できた</label>
+    </div>
+
+    <!-- STEP4 -->
+    <div class="step" data-step="4">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 4</span><h3>有料プランに申し込む（月額プラン）</h3></div>
+      </div>
+      <div class="step-body">
+        <p>「Code」の画面を使うには、<b>Pro以上の有料プラン</b>が必要です（無料プランでは使えません）。目安は<b>月額20ドル（年払いだと少し安くなります）</b>です。画面の案内にそって、クレジットカードなどの支払い方法を登録してください。</p>
+        <div class="warn-box">💳 ここだけ費用が発生します。申し込む前に、内容と金額を画面でよくご確認ください。会社経費で処理したい場合はLINEグループでご相談ください。</div>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="4"> できた</label>
+    </div>
+
+    <!-- STEP5 -->
+    <div class="step" data-step="5">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><circle cx="7" cy="6.5" r=".5" fill="currentColor"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 5</span><h3>画面いちばん上の「Code」を押す</h3></div>
+      </div>
+      <div class="step-body">
+        <p>Claudeの画面の上のほうに、<span class="kbd">Chat</span> <span class="kbd">Cowork</span> <span class="kbd">Code</span> というタブが並んでいます。真ん中あたりの「<b>Code</b>」を押してください。</p>
+        <p>「フォルダを選んでください」という案内が出たら、<b>「新しいフォルダを作る」</b>を選び、デスクトップに好きな名前（例：れんしゅう）で作って選んでください。むずかしく考えなくて大丈夫です。</p>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="5"> できた</label>
+    </div>
+
+    <!-- STEP6 -->
+    <div class="step" data-step="6">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 6</span><h3>「おはようございます」と打って送る</h3></div>
+      </div>
+      <div class="step-body">
+        <p>画面の下のほうにある、文字を入力する四角い場所（入力欄）をクリックして、次のとおり入力します。</p>
+        <div class="type-box">💬 おはようございます</div>
+        <p>入力したら、<span class="kbd">Enter</span> キーを押すか、送信ボタン（紙飛行機のマーク）を押します。しばらく待つと、Claudeからの返事が画面に表示されます。</p>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="6"> できた</label>
+    </div>
+
+    <!-- STEP7 -->
+    <div class="step" data-step="7">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1l1.5-2h7L17 6h1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 7</span><h3>返事が出た画面を撮影する</h3></div>
+      </div>
+      <div class="step-body">
+        <div class="os-only win">
+          <p>キーボードの <span class="kbd">Win</span> ＋ <span class="kbd">Shift</span> ＋ <span class="kbd">S</span> を同時に押します。画面が少し暗くなるので、返事が見えている範囲をマウスでドラッグして囲むと、その部分だけ写真として保存されます。</p>
+        </div>
+        <div class="os-only mac">
+          <p>キーボードの <span class="kbd">Shift</span> ＋ <span class="kbd">Command</span> ＋ <span class="kbd">4</span> を同時に押します。十字のマークに変わるので、返事が見えている範囲をドラッグして囲むと、デスクトップに写真が保存されます。</p>
+        </div>
+        <div class="tip"><b>ヒント：</b>「おはようございます」と打った文字と、その下に出たClaudeの返事の両方が写っていればOKです。</div>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="7"> できた</label>
+    </div>
+
+    <!-- STEP8 -->
+    <div class="step" data-step="8">
+      <div class="step-top">
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 3.6L18 8l-3.6 1.8L12 14l-1.8-4.2L6 8l4.2-1.4z"/><path d="M19 15l.8 1.6L21 17l-1.2.6L19 19l-.8-1.4L17 17l1.2-.4z"/></svg></div>
+        <div><span style="font-size:12.5px;color:var(--ink-soft);font-weight:700;">STEP 8（さいご）</span><h3>撮った画面をLINEグループに送る</h3></div>
+      </div>
+      <div class="step-body">
+        <p>LINEアプリを開き、グループ「<b>claude code研修</b>」を開きます。写真を送るボタン（クリップや＋のマーク）を押して、さきほど保存した画像を選んで送信します。</p>
+        <p style="margin-bottom:0;">これで準備は完了です。おつかれさまでした！</p>
+      </div>
+      <label class="check-row"><input type="checkbox" data-check="8"> 送った！</label>
+    </div>
+
+  </div>
+
+  <div class="final">
+    <h2>✅ 全部終わったか、最後にチェック</h2>
+    <ol>
+      <li>Claudeをパソコンに入れた</li>
+      <li>メールアドレスでサインインした</li>
+      <li>有料プランに申し込んだ</li>
+      <li>「Code」の画面で「おはようございます」と送って、返事が出た</li>
+      <li>その画面を撮影して、LINEグループ「claude code研修」に送った（<b>11月19日(木)まで</b>）</li>
+    </ol>
+  </div>
+
+  <div class="help">
+    <h2>🙋 途中でわからなくなったら</h2>
+    <p style="margin:0;color:var(--ink-soft);">遠慮なく、いつでも聞いてください。スクリーンショットを送っていただけると、より早くお答えできます。</p>
+    <div class="line-badge">LINEグループ「claude code研修」へ</div>
+  </div>
+
+  <footer>Claude Code研修（2026年11月26日）事前準備ガイド ／ 最終更新 2026年9月23日</footer>
+</div>
+
+<script>
+(function(){
+  var app=document.getElementById('app');
+  var btnWin=document.getElementById('btn-win');
+  var btnMac=document.getElementById('btn-mac');
+  function setOS(os){
+    app.classList.remove('os-win','os-mac');
+    app.classList.add('os-'+os);
+    btnWin.setAttribute('aria-pressed', os==='win');
+    btnMac.setAttribute('aria-pressed', os==='mac');
+    try{localStorage.setItem('cc-guide-os', os);}catch(e){}
+  }
+  btnWin.addEventListener('click',function(){setOS('win');});
+  btnMac.addEventListener('click',function(){setOS('mac');});
+  try{
+    var saved=localStorage.getItem('cc-guide-os');
+    if(saved==='mac'||saved==='win') setOS(saved);
+  }catch(e){}
+
+  document.querySelectorAll('[data-check]').forEach(function(cb){
+    var key='cc-guide-check-'+cb.getAttribute('data-check');
+    var stepEl=cb.closest('.step');
+    try{
+      if(localStorage.getItem(key)==='1'){cb.checked=true; stepEl.classList.add('done');}
+    }catch(e){}
+    cb.addEventListener('change',function(){
+      stepEl.classList.toggle('done', cb.checked);
+      try{localStorage.setItem(key, cb.checked?'1':'0');}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
